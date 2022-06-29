@@ -1,0 +1,68 @@
+import speech_recognition as sr
+from datetime import date
+from gpiozero import LED
+from time import sleep
+import time
+import vlc
+
+red = LED(17)
+relay1 = LED(14)
+relay2 = LED(15)
+
+r = sr.Recognizer()
+mic = sr.Microphone()
+
+def Again():
+    print("Choose what to do!\n")
+    print("today")
+    print("take a quiz")
+    print("play video\n")
+
+    while True:
+        with mic as source:
+            audio = r.listen(source)
+        words = r.recognize_google(audio)
+        print(words)
+
+        if words == "today":
+            print(date.today())
+
+        if words == "take a quiz":
+            print('Start to Take a Quiz\n')
+
+            print("Welcome to Quiz Game!\n")
+
+            score = 0
+
+            question_1 = print("1) What is 1 + 1 = ?\n(a) 1\n(b) 2\n(c) 3\n(d) 4\n\n ")
+            answer_1 = "b"
+
+            print('Answer:')
+            with mic as source:
+                audio = r.listen(source)
+            answer = r.recognize_google(audio)
+            print(answer)
+
+            if answer == answer_1:
+                print("Correct! Good Job.\n")
+                score = score + 1
+                Again()
+            else:
+                print("Incorrect!\n")
+
+        if words == "play video":
+            print('Playing Video')
+            media = vlc.MediaPlayer("vid1.mp4")
+            media.play()
+            break
+      
+        if words == "exit":
+            print("...")
+            sleep(0.5)
+            print("...")
+            sleep(0.5)
+            print("...")
+            sleep(0.5)
+            print("Goodbye")
+            break
+Again()
